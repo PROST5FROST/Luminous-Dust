@@ -20,9 +20,9 @@ license="LGPL3.0"
 # The modid of the mod
 modId="lightdust" #mandatory
 # The version number of the mod
-version="1.2" #mandatory
+version="0.1" #mandatory
 # A display name for the mod
-displayName="Light Dust Reforged" #mandatory
+displayName="Light Dust Neoforge" #mandatory
 # A URL to query for updates for this mod. See the JSON update specification https://docs.minecraftforge.net/en/latest/misc/updatechecker/
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 # A URL for the "homepage" for this mod, displayed in the mod UI
