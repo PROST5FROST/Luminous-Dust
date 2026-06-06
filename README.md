@@ -1,25 +1,33 @@
+# Light Dust Reforged
+Light Dust Reforged is a lightweight client side mod that adds floating dust to your world. With interactive physics.
 
-Installation information
-=======
+## Configuration
 
-This template repository can be directly cloned to get you started with a new
-mod. Simply create a new repository cloned from this one, by following the
-instructions provided by [GitHub](https://docs.github.com/en/repositories/creating-and-managing-repositories/creating-a-repository-from-a-template).
+Everything is in lightdust.toml file so you will understand.
 
-Once you have your clone, simply open the repository in the IDE of your choice. The usual recommendation for an IDE is either IntelliJ IDEA or Eclipse.
+## Q&A
 
-If at any point you are missing libraries in your IDE, or you've run into problems you can
-run `gradlew --refresh-dependencies` to refresh the local cache. `gradlew clean` to reset everything 
-{this does not affect your code} and then start the process again.
+**Q: Does this work with true dark mods?**
 
-Mapping Names:
-============
-By default, the MDK is configured to use the official mapping names from Mojang for methods and fields 
-in the Minecraft codebase. These names are covered by a specific license. All modders should be aware of this
-license. For the latest license text, refer to the mapping file itself, or the reference copy here:
-https://github.com/NeoForged/NeoForm/blob/main/Mojang.md
+**A:** Yes. It should work with them. However, you may need to change the opacity of the dust.
 
-Additional Resources: 
-==========
-Community Documentation: https://docs.neoforged.net/  
-NeoForged Discord: https://discord.neoforged.net/
+**Q: Does this work with Shaders?**
+
+**A:** Yes. However, shaders often change how transparency renders. If the dust looks too invisible, increase `ambientDustOpacity` in the config (try `0.45` or higher).
+
+**Q: How do I disable the Block Break particles?**
+
+**A:** Set `breakParticleCount` to `0` in the config.
+
+**Q: Will mod have Dynamic Lights support?**
+
+**A:** Maybe, after some time.
+
+**Q: Why the mod is not up to date with original mod?**
+
+**A:** I wanted to create a more lightweight and performance-focused version of the original, as the current state of that mod felt overengineered for my needs. And the old version was perfect
+
+**Q: Config menu?**
+
+**A:** Sure, i'm going to work into it.
+
