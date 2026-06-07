@@ -1,7 +1,7 @@
 package com.lightdust.client.particle;
 
+import com.lightdust.client.particle.helpers.DustParticleColor;
 import com.lightdust.config.LightDustConfig;
-import com.lightdust.logic.DustUtils;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
@@ -9,7 +9,6 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
@@ -18,11 +17,9 @@ import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import com.mojang.logging.LogUtils;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
 
 @OnlyIn(Dist.CLIENT)
 public class DustParticle extends TextureSheetParticle {
@@ -30,9 +27,7 @@ public class DustParticle extends TextureSheetParticle {
    public static final Long2IntOpenHashMap AMBIENT_COUNTS = new Long2IntOpenHashMap();
    public static int TOTAL_AMBIENT_COUNT = 0;
    public static BlockPos PENDING_POS = null;
-   private static final Logger LOGGER = LogUtils.getLogger();
-   private static final java.util.Map<net.minecraft.world.level.block.Block, float[]> LIGHT_COLORS = new java.util.HashMap<>();
-   public static boolean colorsLoaded = false;
+
 
    private final BlockPos ownerPos;
    private final float rotSpeed;
@@ -55,7 +50,7 @@ public class DustParticle extends TextureSheetParticle {
          float baseBrightness = 0.15F + (0.85F * intensity);
 
          // grab the tint
-         float[] tint = getNearbyTint(level, this.ownerPos);
+         float[] tint = DustParticleColor.getNearbyTint(level, this.ownerPos);
          float strength = LightDustConfig.TINT_STRENGTH.get().floatValue();
 
          if (tint != null && strength > 0) {
@@ -157,7 +152,7 @@ public class DustParticle extends TextureSheetParticle {
             float intensity = Math.max(0f, (blockLight - 6) / 9.0f);
             float baseBrightness = 0.15F + (0.85F * intensity);
 
-            float[] tint = getNearbyTint(level, this.ownerPos);
+            float[] tint = DustParticleColor.getNearbyTint(level, this.ownerPos);
             float strength = LightDustConfig.TINT_STRENGTH.get().floatValue();
 
             if (tint != null && strength > 0) {
@@ -288,60 +283,8 @@ public class DustParticle extends TextureSheetParticle {
       public Provider(SpriteSet sprites) { this.sprites = sprites; }
 
       @Override
-      public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
+      public Particle createParticle(@NotNull SimpleParticleType type, @NotNull ClientLevel level, double x, double y, double z, double dx, double dy, double dz) {
          return new DustParticle(level, x, y, z, dx, dy, dz, sprites);
       }
-   }
-
-   public static void reloadColors() {
-      LIGHT_COLORS.clear();
-      for (String entry : LightDustConfig.CUSTOM_TINTS.get()) {
-         try {
-            String[] parts = entry.split("=");
-            if (parts.length == 2 && parts[1].contains("#")) {
-               net.minecraft.resources.ResourceLocation rl = net.minecraft.resources.ResourceLocation.parse(parts[0].trim());
-               net.minecraft.world.level.block.Block block = BuiltInRegistries.BLOCK.get(rl);
-
-               if (block != null && block != net.minecraft.world.level.block.Blocks.AIR) {
-                  String hex = parts[1].substring(parts[1].indexOf("#") + 1).trim();
-                  if (hex.length() == 6) {
-                     int r = Integer.parseInt(hex.substring(0, 2), 16);
-                     int g = Integer.parseInt(hex.substring(2, 4), 16);
-                     int b = Integer.parseInt(hex.substring(4, 6), 16);
-                     LIGHT_COLORS.put(block, new float[]{r / 255f, g / 255f, b / 255f});
-                  } else {
-                     LOGGER.error("[Light Dust] Invalid hex code length in config for entry '{}'. Must be 6 characters after '#'.", entry);
-                  }
-               } else {
-                  LOGGER.warn("[Light Dust] Block not found in registry for config entry '{}'. It may be from an uninstalled mod.", entry);
-               }
-            } else {
-               LOGGER.error("[Light Dust] Malformed custom tint entry: '{}'. Format must be 'modid:block_name=#RRGGBB'.", entry);
-            }
-         } catch (NumberFormatException e) {
-            LOGGER.error("[Light Dust] Invalid hex characters in config for entry '{}'.", entry);
-         } catch (Exception e) {
-            LOGGER.error("[Light Dust] Failed to parse custom tint config entry '{}': {}", entry, e.getMessage());
-         }
-      }
-      colorsLoaded = true;
-   }
-
-   private float[] getNearbyTint(ClientLevel level, BlockPos pos) {
-      if (!colorsLoaded) {
-         reloadColors();
-      }
-
-      for (BlockPos p : BlockPos.betweenClosed(pos.offset(-2, -2, -2), pos.offset(2, 2, 2))) {
-         net.minecraft.world.level.block.state.BlockState state = level.getBlockState(p);
-
-         if (state.getLightEmission(level, p) > 0) {
-            float[] color = LIGHT_COLORS.get(state.getBlock());
-            if (color != null) {
-               return color;
-            }
-         }
-      }
-      return null;
    }
 }

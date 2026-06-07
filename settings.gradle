@@ -1,9 +1,21 @@
 pluginManagement {
     repositories {
+        maven { url = 'https://maven.neoforged.net/releases' }
         gradlePluginPortal()
     }
 }
 
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '1.0.0'
+}
+
+// ДОДАЄМО ЦЕЙ БЛОК СЮДИ:
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_PROJECT) // Наказуємо слухатися налаштувань тут
+    repositories {
+        maven { url = 'https://maven.neoforged.net/releases' } // Для самого форджа
+        mavenCentral()                                         // Для парсера json та інших ліб
+        maven { url = 'https://maven.isxander.dev/releases' }  // Для YACL
+        maven { url = 'https://maven.quiltmc.org/repository/release/' } // Для квілтівських приколів
+    }
 }
