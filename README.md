@@ -1,5 +1,5 @@
-# Light Dust Reforged
-Light Dust Reforged is a lightweight client side mod that adds floating dust to your world. With interactive physics. Original mod by Swiss8191
+# Light Dust Neoforge
+Light Dust Neoforge is a lightweight client side mod that adds floating dust to your world. With interactive physics. Original mod by Swiss8191
 
 ## Configuration
 
