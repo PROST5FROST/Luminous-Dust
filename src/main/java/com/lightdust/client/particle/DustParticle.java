@@ -1,6 +1,7 @@
 package com.lightdust.client.particle;
 
 import com.lightdust.client.particle.helpers.DustParticleColor;
+import com.lightdust.client.particle.helpers.DustPhysicsHelper;
 import com.lightdust.config.LightDustConfig;
 import it.unimi.dsi.fastutil.longs.Long2IntOpenHashMap;
 import net.minecraft.client.Minecraft;
@@ -12,11 +13,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
@@ -75,7 +72,7 @@ public class DustParticle extends TextureSheetParticle {
          this.alpha = baseAlpha;
       }
 
-      this.quadSize = LightDustConfig.PARTICLE_SIZE.get().floatValue();
+      this.quadSize = (LightDustConfig.PARTICLE_SIZE.get().floatValue() / 10);
       this.gravity = 0.000F;
 
       if (dx != 0 || dy != 0 || dz != 0) {
@@ -126,8 +123,8 @@ public class DustParticle extends TextureSheetParticle {
    public void tick() {
       super.tick();
       // Fade Logic
-      if (this.age < 20) {
-         this.alpha = this.baseAlpha * (this.age / 20.0F);
+      if (this.age < 5) {
+         this.alpha = this.baseAlpha * (this.age / 5.0F);
       } else if (this.age > this.lifetime - 20) {
          this.alpha = this.baseAlpha * ((this.lifetime - this.age) / 20.0F);
       } else {
@@ -194,79 +191,16 @@ public class DustParticle extends TextureSheetParticle {
       this.roll += this.rotSpeed;
 
       // Physics
-      float seed = (float)(this.x + this.y + this.z);
-      float time = (float)((this.age + seed) * 0.15);
-      double sinX = Mth.sin(time * 0.8f + seed);
-      double cosZ = Mth.cos(time * 1.1f + seed);
 
-      double driftDown = 0.00002 + (level.random.nextDouble() * 0.00005);
-      double microTurbulence = (level.random.nextDouble() - 0.5) * 0.00012;
-
-      this.xd += sinX * 0.0001 + microTurbulence;
-      this.zd += cosZ * 0.0001 + (microTurbulence * 0.5);
-      this.yd -= (driftDown + (sinX * 0.00005));
-      double jitterX = (level.random.nextDouble() - 0.5) * 0.02;
-      double jitterY = (level.random.nextDouble() - 0.5) * 0.02;
-      double jitterZ = (level.random.nextDouble() - 0.5) * 0.02;
+      DustPhysicsHelper.applyAmbientDrift(this, this.level);
+      DustPhysicsHelper.applyThermalUpdraft(this, this.level);
 
       Player player = Minecraft.getInstance().player;
-      if (player != null && player.distanceToSqr(this.x, this.y, this.z) < 4.0) {
-         double range = 2.0;
-         double dx = this.x - player.getX();
-         double dy = this.y - (player.getY() + 1.0);
-         double dz = this.z - player.getZ();
-         double dist = Math.sqrt(dx*dx + dy*dy + dz*dz);
-         if (dist < 0.01) dist = 0.01;
-         double nx = dx / dist; double ny = dy / dist; double nz = dz / dist;
-         Vec3 pVel = player.getDeltaMovement();
-         double horizontalSpeed = Math.sqrt(pVel.x * pVel.x + pVel.z * pVel.z);
-         if (player.swingTime > 0) {
-            Vec3 look = player.getLookAngle();
-            if ((nx * look.x) + (ny * look.y) + (nz * look.z) > 0.5) {
-               double slashForce = 0.002;
-               this.xd += look.x * slashForce + (nx * 0.005) + jitterX;
-               this.yd += look.y * slashForce + (ny * 0.005) + jitterY;
-               this.zd += look.z * slashForce + (nz * 0.005) + jitterZ;
-            }
-         }
+      if (player != null) {
+         DustPhysicsHelper.applyPlayerInteraction(this, this.level, player);
 
-         if (player.isUsingItem() && player.getUseItem().getItem() instanceof ShieldItem) {
-            Vec3 look = player.getLookAngle();
-            if ((nx * look.x) + (ny * look.y) + (nz * look.z) > 0.3) {
-               double shieldPush = 0.04 / dist;
-               this.xd += (nx * shieldPush) + jitterX;
-               this.yd += (ny * shieldPush) + jitterY;
-               this.zd += (nz * shieldPush) + jitterZ;
-            }
-         }
-
-         if (horizontalSpeed > 0.01) {
-            double proximityFactor = (range - dist) / range;
-            double pushStrength = horizontalSpeed * proximityFactor * 0.05;
-            this.xd += (nx * pushStrength) + jitterX;
-            this.yd += (ny * pushStrength) + jitterY;
-            this.zd += (nz * pushStrength) + jitterZ;
-         }
-      }
-
-      if (level.isClientSide) {
-         HitResult hit = Minecraft.getInstance().hitResult;
-         if (hit != null && hit.getType() == HitResult.Type.BLOCK) {
-            BlockPos breakPos = ((BlockHitResult)hit).getBlockPos();
-            if (player != null && player.swingTime > 0 && breakPos.distToCenterSqr(this.x, this.y, this.z) < 4.0) {
-               double dX = this.x - (breakPos.getX() + 0.5);
-               double dY = this.y - (breakPos.getY() + 0.5);
-               double dZ = this.z - (breakPos.getZ() + 0.5);
-               double distSqrBreak = dX * dX + dY * dY + dZ * dZ;
-               if (level.getBlockState(breakPos).isAir() && distSqrBreak < 3) {
-                  double distBreak = Math.sqrt(distSqrBreak);
-                  if (distBreak < 0.1) distBreak = 0.1;
-                  double force = 0.01;
-                  this.xd += (dX / distBreak) * force + jitterX;
-                  this.yd += (dY / distBreak) * force + jitterY;
-                  this.zd += (dZ / distBreak) * force + jitterZ;
-               }
-            }
+         if (level.isClientSide) {
+            DustPhysicsHelper.applyBlockBreakInteraction(this, this.level, player);
          }
       }
 
@@ -287,4 +221,19 @@ public class DustParticle extends TextureSheetParticle {
          return new DustParticle(level, x, y, z, dx, dy, dz, sprites);
       }
    }
+
+   public double getX() { return this.x; }
+   public double getY() { return this.y; }
+   public double getZ() { return this.z; }
+
+   public int getAge() { return this.age; }
+
+   public double getXd() { return this.xd; }
+   public double getZd() { return this.zd; }
+   public double getYd() { return this.yd; }
+
+   public void setXd(double xd) { this.xd = xd; }
+   public void setYd(double yd) { this.yd = yd; }
+   public void setZd(double zd) { this.zd = zd; }
+
 }
