@@ -46,7 +46,7 @@ public class DustPhysicsHelper {
                 updraftForce = 0.001 / (i + 1);
             } else if (state.is(Blocks.FIRE) || state.is(Blocks.SOUL_FIRE) || state.is(Blocks.MAGMA_BLOCK)) {
                 updraftForce = 0.001 / (i + 1);
-            } else if (state.is(Blocks.TORCH) || state.is(Blocks.SOUL_TORCH)) {
+            } else if (state.is(Blocks.TORCH) || state.is(Blocks.SOUL_TORCH) || state.is(Blocks.WALL_TORCH) || state.is(Blocks.SOUL_WALL_TORCH)) {
                 updraftForce = 0.0008 / (i + 1);
             }
 

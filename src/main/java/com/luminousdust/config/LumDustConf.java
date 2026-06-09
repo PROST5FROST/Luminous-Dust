@@ -59,7 +59,7 @@ public class LumDustConf {
               .defineInRange("ambientDustOpacity", 0.22, 0.0, 1.0);
 
       PARTICLE_SIZE = BUILDER.comment("Base size of the dust particles.")
-              .defineInRange("particleSize", 0.22, 0.01, 1);
+              .defineInRange("particleSize", 0.44, 0.01, 1);
 
       PARTICLE_LIFETIME = BUILDER.comment("Base lifetime of the dust particles in ticks.")
               .defineInRange("particleLifetime", 200, 20, 1000);

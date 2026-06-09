@@ -8,20 +8,31 @@ import java.util.Map;
 
 public class LumDustConfCache {
     public static int AMBIENT_HARD_CAP;
+    public static int PARTICLE_LIFETIME;
+    public static int AMBIENT_RADIUS;
+    public static int MIN_BLOCK_LIGHT;
     public static int DAYTIME_LIGHT_DIFF;
+
+
+    public static float TINT_STRENGTH;
     public static float AMBIENT_DUST_OPACITY;
     public static float PARTICLE_SIZE;
-    public static int PARTICLE_LIFETIME;
-    public static float TINT_STRENGTH;
 
     public static final Map<ResourceLocation, float[]> TINT_MAP = new HashMap<>();
 
     public static void refresh() {
+        // Well. Everything
         AMBIENT_HARD_CAP = LumDustConf.AMBIENT_HARD_CAP.get();
-        DAYTIME_LIGHT_DIFF = LumDustConf.DAYTIME_LIGHT_DIFF.get();
+        AMBIENT_RADIUS = LumDustConf.AMBIENT_RADIUS.get();
+
         AMBIENT_DUST_OPACITY = LumDustConf.AMBIENT_DUST_OPACITY.get().floatValue();
+        // Light conf
+        DAYTIME_LIGHT_DIFF = LumDustConf.DAYTIME_LIGHT_DIFF.get();
+        MIN_BLOCK_LIGHT = LumDustConf.MIN_BLOCK_LIGHT.get();
+        // Particle conf
         PARTICLE_SIZE = LumDustConf.PARTICLE_SIZE.get().floatValue();
         PARTICLE_LIFETIME = LumDustConf.PARTICLE_LIFETIME.get();
+
         TINT_STRENGTH = LumDustConf.TINT_STRENGTH.get().floatValue();
 
         TINT_MAP.clear();
