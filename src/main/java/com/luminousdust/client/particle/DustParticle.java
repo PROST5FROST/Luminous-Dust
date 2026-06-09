@@ -1,5 +1,6 @@
 package com.luminousdust.client.particle;
 
+import com.luminousdust.client.particle.helpers.DustCullingHelper;
 import com.luminousdust.client.particle.helpers.DustParticleColor;
 import com.luminousdust.client.particle.helpers.DustPhysicsHelper;
 import com.luminousdust.config.LumDustConf;
@@ -10,7 +11,6 @@ import net.minecraft.client.particle.*;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.LightLayer;
@@ -131,20 +131,19 @@ public class DustParticle extends TextureSheetParticle {
          this.alpha = this.baseAlpha;
       }
 
+      BlockPos currentPos = BlockPos.containing(this.x, this.y, this.z);
+      int blockLight = level.getBrightness(LightLayer.BLOCK, currentPos);
+
+
+      if (DustCullingHelper.shouldRemove(this, this.level, this.tickOffset, blockLight)) {
+         this.remove();
+         return;
+      }
+
+
+
+
       if ((this.age + tickOffset) % 20 == 0) {
-         BlockPos currentPos = BlockPos.containing(this.x, this.y, this.z);
-         if (level.getFluidState(currentPos).is(FluidTags.WATER)) {
-            this.remove(); return;
-         }
-
-         Player player = Minecraft.getInstance().player;
-         int blockLight = level.getBrightness(LightLayer.BLOCK, currentPos);
-         // I also need to add  && DustUtils.isHoldingLight(player) here. But with sync from other side
-         if (blockLight < 4) {
-            this.remove();
-            return;
-         }
-
          if (this.ownerPos != null) {
             float intensity = Math.max(0f, (blockLight - 6) / 9.0f);
             float baseBrightness = 0.15F + (0.85F * intensity);
@@ -164,26 +163,6 @@ public class DustParticle extends TextureSheetParticle {
 
             float ambientOpacity = LumDustConf.AMBIENT_DUST_OPACITY.get().floatValue();
             this.baseAlpha = ambientOpacity + (0.28F * intensity);
-         }
-
-         long time = level.getDayTime() % 24000;
-         boolean isDay = time < 13000 || time > 23000;
-         if (isDay) {
-            int skyLight = level.getBrightness(LightLayer.SKY, currentPos);
-            int diffThreshold = LumDustConf.DAYTIME_LIGHT_DIFF.get();
-
-            if ((blockLight - skyLight) <= diffThreshold) {
-               this.remove();
-               return;
-            }
-         }
-
-         if (player != null) {
-            double maxDist = LumDustConf.AMBIENT_HARD_CAP.get();
-            if (player.distanceToSqr(this.x, this.y, this.z) > maxDist * maxDist) {
-               this.remove();
-               return;
-            }
          }
       }
 

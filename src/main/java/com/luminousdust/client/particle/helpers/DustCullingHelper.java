@@ -13,8 +13,7 @@ public class DustCullingHelper {
 
     // Not Ready Yet.
 
-    public static boolean shouldRemove(DustParticle particle, ClientLevel level, int tickOffset) {
-        int min_block_light = LumDustConfCache.MIN_BLOCK_LIGHT;
+    public static boolean shouldRemove(DustParticle particle, ClientLevel level, int tickOffset, int blockLight) {
         // Every 1 second we check everything here.
         if ((particle.getAge() + tickOffset) % 20 != 0) {
             return false;
@@ -28,8 +27,8 @@ public class DustCullingHelper {
         }
 
         // Min light check
-        int blockLight = level.getBrightness(LightLayer.BLOCK, currentPos);
-        if (blockLight < min_block_light) {
+
+        if (blockLight < 4) {
             return true;
         }
 
