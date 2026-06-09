@@ -3,7 +3,7 @@ Luminous Dust is a lightweight client side mod that adds floating dust to your w
 
 ## What sense of this mod?
 
-Basically, Luminous Dust is a fork of the original Light Dust, but with completely new assets, licensed under LGPL-3.0. Our goal was to strip away the overengineered parts and create a clean, performance-focused, and community-friendly base.
+Basically, Luminous Dust is a fork of the original Light Dust, but with completely new assets, licensed under LGPL v2.1. Our goal was to strip away the overengineered parts and create a clean, performance-focused, and community-friendly base.
 
 ## Configuration
 
