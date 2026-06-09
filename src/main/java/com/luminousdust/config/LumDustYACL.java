@@ -23,7 +23,6 @@ public class LumDustYACL {
                                         val -> { LumDustConf.AMBIENT_RADIUS.set(val); LumDustConfCache.refresh(); })
                                 .controller(opt -> IntegerSliderControllerBuilder.create(opt).range(1, 32).step(1))
                                 .build())
-
                         .option(Option.<Integer>createBuilder()
                                 .name(Component.literal("Hard Cap Radius"))
                                 .description(OptionDescription.of(Component.literal("ЕБУЧИЙ СЛУЧАЙ ШЛЮХИ ЕБАНЫЕ")))
