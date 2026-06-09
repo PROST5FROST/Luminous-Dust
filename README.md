@@ -1,9 +1,14 @@
-# Light Dust Neoforge
-Light Dust Neoforge is a lightweight client side mod that adds floating dust to your world. With interactive physics. Original mod by Swiss8191
+# Luminous Dust
+Luminous Dust is a lightweight client side mod that adds floating dust to your world. With interactive physics. Original mod by Swiss8191
+
+## What sense of this mod?
+
+Basically, Luminous Dust is a fork of the original Light Dust, but with completely new assets, licensed under LGPL-3.0. Our goal was to strip away the overengineered parts and create a clean, performance-focused, and community-friendly base.
 
 ## Configuration
 
-Everything is in lightdust.toml file so you will understand.
+Everything is in luminousdust.toml file so you will understand.
+And a YACL config in new dev builds!
 
 ## Q&A
 
