@@ -1,7 +1,7 @@
 package com.luminousdust.event;
 
+import com.luminousdust.client.particle.helpers.DustLifeManager;
 import com.luminousdust.config.LumDustConf;
-import com.luminousdust.client.particle.DustParticle;
 import com.luminousdust.logic.DustSpawner;
 import net.minecraft.client.Minecraft;
 import net.neoforged.api.distmarker.Dist;
@@ -13,6 +13,8 @@ import net.neoforged.neoforge.client.event.ClientTickEvent.Pre;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerChangedDimensionEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent.PlayerRespawnEvent;
 import net.neoforged.neoforge.event.level.LevelEvent.Unload;
+
+import static com.luminousdust.client.particle.helpers.DustLifeManager.AMBIENT_COUNTS;
 
 @EventBusSubscriber(modid = "luminousdust", value = Dist.CLIENT)
 public class AmbientDustHandler {
@@ -62,7 +64,7 @@ public class AmbientDustHandler {
    }
 
    private static void clearMaps() {
-      DustParticle.AMBIENT_COUNTS.clear();
-      DustParticle.PENDING_POS = null;
+      AMBIENT_COUNTS.clear();
+      DustLifeManager.PENDING_POS = null;
    }
 }

@@ -29,18 +29,18 @@ public class DustParticleColor {
                             int b = Integer.parseInt(hex.substring(4, 6), 16);
                             LIGHT_COLORS.put(block, new float[]{r / 255f, g / 255f, b / 255f});
                         } else {
-                            LOGGER.error("[Light Dust] Invalid hex code length in config for entry '{}'. Must be 6 characters after '#'.", entry);
+                            LOGGER.error("[Luminous Dust] Invalid hex code length in config for entry '{}'. Must be 6 characters after '#'.", entry);
                         }
                     } else {
-                        LOGGER.warn("[Light Dust] Block not found in registry for config entry '{}'. It may be from an uninstalled mod.", entry);
+                        LOGGER.warn("[Luminous Dust] Block not found in registry for config entry '{}'. It may be from an uninstalled mod.", entry);
                     }
                 } else {
-                    LOGGER.error("[Light Dust] Malformed custom tint entry: '{}'. Format must be 'modid:block_name=#RRGGBB'.", entry);
+                    LOGGER.error("[Luminous Dust] Malformed custom tint entry: '{}'. Format must be 'modid:block_name=#RRGGBB'.", entry);
                 }
             } catch (NumberFormatException e) {
-                LOGGER.error("[Light Dust] Invalid hex characters in config for entry '{}'.", entry);
+                LOGGER.error("[Luminous Dust] Invalid hex characters in config for entry '{}'.", entry);
             } catch (Exception e) {
-                LOGGER.error("[Light Dust] Failed to parse custom tint config entry '{}': {}", entry, e.getMessage());
+                LOGGER.error("[Luminous Dust] Failed to parse custom tint config entry '{}': {}", entry, e.getMessage());
             }
         }
         colorsLoaded = true;

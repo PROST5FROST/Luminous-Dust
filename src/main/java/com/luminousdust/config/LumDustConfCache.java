@@ -1,22 +1,31 @@
 package com.luminousdust.config;
 
+import com.mojang.logging.LogUtils;
 import net.minecraft.resources.ResourceLocation;
+import org.slf4j.Logger;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class LumDustConfCache {
+
+    private static final Logger LOGGER = LogUtils.getLogger();
+
     public static int AMBIENT_HARD_CAP;
     public static int PARTICLE_LIFETIME;
     public static int AMBIENT_RADIUS;
     public static int MIN_BLOCK_LIGHT;
     public static int DAYTIME_LIGHT_DIFF;
+    public static int BREAK_PARTICLE_COUNT;
+    public static int AMBIENT_BLOCK_CAP;
 
 
     public static float TINT_STRENGTH;
     public static float AMBIENT_DUST_OPACITY;
     public static float PARTICLE_SIZE;
+    public static float PLAYER_INTERACT_RADIUS;
+    public static float BREAK_PARTICLE_SPEED;
 
     public static final Map<ResourceLocation, float[]> TINT_MAP = new HashMap<>();
 
@@ -24,6 +33,7 @@ public class LumDustConfCache {
         // Well. Everything
         AMBIENT_HARD_CAP = LumDustConf.AMBIENT_HARD_CAP.get();
         AMBIENT_RADIUS = LumDustConf.AMBIENT_RADIUS.get();
+        AMBIENT_BLOCK_CAP = LumDustConf.AMBIENT_BLOCK_CAP.get();
 
         AMBIENT_DUST_OPACITY = LumDustConf.AMBIENT_DUST_OPACITY.get().floatValue();
         // Light conf
@@ -34,6 +44,10 @@ public class LumDustConfCache {
         PARTICLE_LIFETIME = LumDustConf.PARTICLE_LIFETIME.get();
 
         TINT_STRENGTH = LumDustConf.TINT_STRENGTH.get().floatValue();
+
+        BREAK_PARTICLE_COUNT = LumDustConf.BREAK_PARTICLE_COUNT.get();
+        PLAYER_INTERACT_RADIUS = LumDustConf.PLAYER_INTERACT_RADIUS.get().floatValue();
+        BREAK_PARTICLE_SPEED = LumDustConf.BREAK_PARTICLE_SPEED.get().floatValue();
 
         TINT_MAP.clear();
         List<? extends String> rawTints = LumDustConf.CUSTOM_TINTS.get();
@@ -48,7 +62,9 @@ public class LumDustConfCache {
                 int b = Integer.valueOf(hex.substring(4, 6), 16);
 
                 TINT_MAP.put(blockKey, new float[]{r / 255f, g / 255f, b / 255f});
-            } catch (Exception ignored) {}
+            } catch (Exception e) {
+                LOGGER.debug("[Luminous Dust] Check your hexes!");
+            }
         }
     }
 }

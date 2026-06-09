@@ -24,7 +24,7 @@ public class LuminousDust {
    public LuminousDust(IEventBus modBus, ModContainer modContainer) {
       ParticleInit.register(modBus);
       modContainer.registerConfig(Type.CLIENT, LumDustConf.SPEC);
-      LOGGER.debug("[Light Dust Neoforge] Yay, at least something working!");
+      LOGGER.debug("[Luminous Dust] Yay, at least something is working!");
 
       if (net.neoforged.fml.ModList.get().isLoaded("yet_another_config_lib_v3")) {
          ModLoadingContext.get().registerExtensionPoint(
