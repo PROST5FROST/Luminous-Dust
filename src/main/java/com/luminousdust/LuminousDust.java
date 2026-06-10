@@ -2,6 +2,7 @@ package com.luminousdust;
 
 import com.luminousdust.client.particle.DustParticle;
 import com.luminousdust.config.LumDustConf;
+import com.luminousdust.config.LumDustConfCache;
 import com.luminousdust.config.LumDustYACL;
 import com.luminousdust.init.ParticleInit;
 import com.mojang.logging.LogUtils;
@@ -13,6 +14,7 @@ import net.neoforged.fml.ModLoadingContext;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import org.slf4j.Logger;
 
@@ -39,6 +41,15 @@ public class LuminousDust {
       @SubscribeEvent
       public static void registerParticleFactories(RegisterParticleProvidersEvent event) {
          event.registerSpriteSet(ParticleInit.DUST_PARTICLE.get(), DustParticle.Provider::new);
+      }
+
+      @SubscribeEvent
+      public static void onConfigReload(ModConfigEvent.Reloading event) {
+         LumDustConfCache.refresh();
+      }
+      @SubscribeEvent
+      public static void onConfigLoad(ModConfigEvent.Loading event) {
+         LumDustConfCache.refresh();
       }
    }
 }

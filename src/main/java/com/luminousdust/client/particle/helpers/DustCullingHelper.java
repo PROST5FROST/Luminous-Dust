@@ -13,16 +13,17 @@ public class DustCullingHelper {
 
     // Not Ready Yet.
 
-    public static boolean shouldRemove(DustParticle particle, ClientLevel level, int tickOffset, int blockLight) {
-        // Every 1 second we check everything here.
-        if ((particle.getAge() + tickOffset) % 20 != 0) {
-            return false;
-        }
+    public static boolean shouldRemove(DustParticle particle, ClientLevel level, int blockLight) {
 
         BlockPos currentPos = BlockPos.containing(particle.getX(), particle.getY(), particle.getZ());
 
         // Water Check
         if (level.getFluidState(currentPos).is(FluidTags.WATER)) {
+            return true;
+        }
+
+        // Lava Check
+        if (level.getFluidState(currentPos).is(FluidTags.LAVA)) {
             return true;
         }
 

@@ -135,16 +135,17 @@ public class DustParticle extends TextureSheetParticle {
       int blockLight = level.getBrightness(LightLayer.BLOCK, currentPos);
 
 
-      if (DustCullingHelper.shouldRemove(this, this.level, this.tickOffset, blockLight)) {
-         this.remove();
-         return;
-      }
-
-
 
 
       if ((this.age + tickOffset) % 20 == 0) {
          if (this.ownerPos != null) {
+
+
+            if (DustCullingHelper.shouldRemove(this, this.level, blockLight)) {
+               this.remove();
+               return;
+            }
+
             float intensity = Math.max(0f, (blockLight - 6) / 9.0f);
             float baseBrightness = 0.15F + (0.85F * intensity);
 
@@ -165,6 +166,8 @@ public class DustParticle extends TextureSheetParticle {
             this.baseAlpha = ambientOpacity + (0.28F * intensity);
          }
       }
+
+
 
       this.oRoll = this.roll;
       this.roll += this.rotSpeed;

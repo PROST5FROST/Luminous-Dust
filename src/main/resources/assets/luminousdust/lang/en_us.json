@@ -1,0 +1,37 @@
+{
+  "luminousdust.config.title": "Luminous Dust Settings",
+
+  "luminousdust.config.category.spawning": "Spawning Settings",
+  "luminousdust.config.spawning.ambientRadius": "Ambient Radius",
+  "luminousdust.config.spawning.ambientRadius.desc": "How far away from the player (in blocks) dust will attempt to spawn. Keep this lower than Hard Cap.",
+  "luminousdust.config.spawning.ambientHardCapRadius": "Hard Cap Radius",
+  "luminousdust.config.spawning.ambientHardCapRadius.desc": "The absolute max distance dust can exist. Particles further than this are deleted instantly. MUST be larger than Ambient Radius.",
+  "luminousdust.config.spawning.ambientBlockCap": "Block Cap Count",
+  "luminousdust.config.spawning.ambientBlockCap.desc": "Max dust particles allowed per single block.",
+  "luminousdust.config.spawning.minBlockLight": "Minimum Block Light",
+  "luminousdust.config.spawning.minBlockLight.desc": "Minimum block light level required for ambient dust to spawn.",
+  "luminousdust.config.spawning.daytimeLightDiff": "Daytime Light Threshold",
+  "luminousdust.config.spawning.daytimeLightDiff.desc": "The minimum difference between Block Light and Sky Light required for dust to spawn during the day. Formula: (BlockLight - SkyLight) > Threshold.",
+
+  "luminousdust.config.category.visuals": "Visual Settings",
+  "luminousdust.config.visuals.ambientDustOpacity": "Dust Opacity",
+  "luminousdust.config.visuals.ambientDustOpacity.desc": "Base opacity for ambient dust (0.22 for vanilla, 0.45+ for shaders).",
+  "luminousdust.config.visuals.particleSize": "Particle Size",
+  "luminousdust.config.visuals.particleSize.desc": "Base size of the dust particles.",
+  "luminousdust.config.visuals.particleLifetime": "Particle Lifetime",
+  "luminousdust.config.visuals.particleLifetime.desc": "Base lifetime of the dust particles in ticks.",
+
+  "luminousdust.config.category.color": "Color & Tinting",
+  "luminousdust.config.color.tintStrength": "Tint Strength",
+  "luminousdust.config.color.tintStrength.desc": "How strongly colored lights (like soul fire) tint the dust. 0.0 = no tint, 1.0 = full color.",
+  "luminousdust.config.color.customTints": "Custom Block Tints",
+  "luminousdust.config.color.customTints.desc": "List of blocks and their hex colors for dust tinting. Format: 'modid:block_name=#RRGGBB'.",
+
+  "luminousdust.config.category.interaction": "Interaction & Physics",
+  "luminousdust.config.interaction.playerInteractRadius": "Player Interaction Radius",
+  "luminousdust.config.interaction.playerInteractRadius.desc": "Radius squared for player interaction (slashing or moving through dust).",
+  "luminousdust.config.interaction.breakParticleCount": "Break Particle Count",
+  "luminousdust.config.interaction.breakParticleCount.desc": "Number of dust particles spawned when a light-emitting block is broken.",
+  "luminousdust.config.interaction.breakParticleSpeed": "Break Particle Speed",
+  "luminousdust.config.interaction.breakParticleSpeed.desc": "How fast the dust shoots out from a broken block."
+}

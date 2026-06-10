@@ -55,7 +55,7 @@ public class DustSpawner {
                                         }
                                     }
 
-                                    if (!level.getFluidState(mutablePos).is(FluidTags.WATER)) {
+                                    if (!level.getFluidState(mutablePos).is(FluidTags.WATER) && !level.getFluidState(mutablePos).is(FluidTags.LAVA)) {
                                         BlockState state = level.getBlockState(mutablePos);
                                         if (state.getCollisionShape(level, mutablePos).isEmpty()) {
                                             int targetCap;
